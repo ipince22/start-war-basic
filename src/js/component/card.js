@@ -6,6 +6,14 @@ import { Context } from "../store/appContext";
 export const Card = props => {
 	const { store, actions } = useContext(Context);
 
+	function favoritos(nombre) {
+		let existe = store.favorites.find(el => el === nombre);
+
+		if (existe != undefined) {
+			return true;
+		}
+	}
+
 	return (
 		<div className="card m-2">
 			<img
@@ -23,17 +31,33 @@ export const Card = props => {
 					{props.var3}
 				</p>
 				<div className="d-flex flex-row justify-content-between">
-					<Link to={`/detalle/${props.id}`}>
-						<span className="btn btn-outline-dark" role="button">
+					<Link to={"/detalle/" + props.id}>
+						<span className="btn btn-outline-dark" href="#" role="button">
 							Learn more
 						</span>
 					</Link>
-					<i
-						className="far fa-heart"
-						onClick={() => {
-							//actions.addFavorites(props.nombre);
-						}}
-					/>
+					{store.favorites.length == 0 ? (
+						<i
+							className="far fa-heart fa-2x"
+							onClick={() => {
+								actions.addFavorites(props.nombre);
+							}}
+						/>
+					) : favoritos(props.nombre) ? (
+						<i
+							className="fas fa-heart fa-2x"
+							onClick={() => {
+								actions.deleteFav(props.nombre);
+							}}
+						/>
+					) : (
+						<i
+							className="far fa-heart fa-2x"
+							onClick={() => {
+								actions.addFavorites(props.nombre);
+							}}
+						/>
+					)}
 				</div>
 			</div>
 		</div>
